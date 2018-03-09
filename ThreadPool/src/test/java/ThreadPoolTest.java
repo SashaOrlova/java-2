@@ -1,3 +1,7 @@
+import ru.java.homework.threads.LightFuture;
+import ru.java.homework.threads.LightFutureImplementation;
+import ru.java.homework.threads.ThreadPool;
+
 import static org.junit.Assert.*;
 
 public class ThreadPoolTest {
@@ -34,6 +38,7 @@ public class ThreadPoolTest {
         }
         for (int i = 0; i < 1000; i++) {
             assertEquals(i + 5, l[i].get());
+            assertTrue(l[i].isReady());
         }
     }
 

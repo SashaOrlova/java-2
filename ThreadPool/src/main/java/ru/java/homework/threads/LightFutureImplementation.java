@@ -1,19 +1,15 @@
+package ru.java.homework.threads;
+
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class LightFutureImplementation<R> implements LightFuture<R> {
     private volatile boolean ready = false;
     private final Supplier<R> sup;
-    private LightFutureImplementation parent;
     private R result;
-    public final Object listener = new Object();
 
-    LightFutureImplementation(Supplier<R> funct) {
-        this(funct, null);
-    }
-    private <T> LightFutureImplementation(Supplier<R> funct, LightFutureImplementation<T> parent) {
+    public LightFutureImplementation(Supplier<R> funct) {
         sup = funct;
-        this.parent = parent;
     }
 
     @Override
@@ -56,6 +52,6 @@ public class LightFutureImplementation<R> implements LightFuture<R> {
     public <T> LightFuture<T> thenApply(Function<R, T> func) {
         return new LightFutureImplementation<T>(() -> func.apply(this.get()));
     }
-}
 
-class LightExecutionException extends RuntimeException {}
+    public static class LightExecutionException extends RuntimeException {}
+}

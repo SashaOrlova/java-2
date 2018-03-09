@@ -1,3 +1,5 @@
+package ru.java.homework.threads;
+
 import java.util.function.Function;
 
 public interface LightFuture<R> {
