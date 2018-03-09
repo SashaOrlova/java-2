@@ -2,7 +2,7 @@ package ru.java.homework.threads;
 
 import java.util.function.Supplier;
 
-public class OneThreadLazy<T> implements Lazy<T> {
+class OneThreadLazy<T> implements Lazy<T> {
     private Supplier<T> sup;
     private T ans;
 

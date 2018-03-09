@@ -12,7 +12,7 @@ public class LazyFactoryTest {
     @org.junit.Test
     public void createThreadLazy() throws Exception {
         Random rand = new Random();
-        Lazy<Integer> l = LazyFactory.createLazy(rand::nextInt);
+        Lazy<Integer> l = LazyFactory.createThreadLazy(rand::nextInt);
         int first = l.get();
         Thread t1 = new Thread(() -> { l.get();
             l.get();
