@@ -1,7 +1,0 @@
-language: java
-jdk: oraclejdk8
-os: linux
-
-script: 
-  - chmod +x script.sh
-  - bash script.sh
