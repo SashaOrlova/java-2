@@ -16,7 +16,6 @@ public class RandomBot implements Bot{
             int x = random.nextInt() % 3;
             int y = random.nextInt() % 3;
             if (board.set(y, x, who)) {
-                board.write();
                 return new Turn(who, x, y);
             }
         }

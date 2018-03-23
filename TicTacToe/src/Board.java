@@ -1,10 +1,11 @@
 public class Board {
-    public enum Field { Cross, Zero, Empty}
-    private Field[][] board  = new Field[3][3];
+    public enum Field {Cross, Zero, Empty}
+
+    private Field[][] board = new Field[3][3];
 
     public Board() {
-        for (int i = 0 ;i < 3; i++)
-            for (int j = 0 ; j < 3; j++)
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
                 board[i][j] = Field.Empty;
     }
 
@@ -28,7 +29,7 @@ public class Board {
         int crossR = 0;
         int zeroL = 0;
         int zeroR = 0;
-        for (int i = 0 ; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             int crossH = 0;
             int zeroH = 0;
             for (int j = 0; j < 3; j++) {
@@ -40,10 +41,10 @@ public class Board {
             if (zeroH == 3)
                 return Field.Zero;
         }
-        for (int i = 0 ; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             int crossV = 0;
             int zeroV = 0;
-            for (int j = 0 ; j < 3; j++) {
+            for (int j = 0; j < 3; j++) {
                 crossV += board[i][j] == Field.Cross ? 1 : 0;
                 zeroV += board[i][j] == Field.Zero ? 1 : 0;
                 crossL += board[i][j] == Field.Cross && i == j ? 1 : 0;
@@ -63,8 +64,8 @@ public class Board {
         return Field.Empty;
     }
 
-    public void write() {
-        for (int i = 0 ;i < 3; i++) {
+    private void write() {
+        for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++)
                 if (board[i][j] == Field.Empty)
                     System.out.print(' ');
@@ -76,5 +77,6 @@ public class Board {
         }
     }
 
-    public class BoardOutOfIndexException extends Exception {}
+    public class BoardOutOfIndexException extends Exception {
+    }
 }
