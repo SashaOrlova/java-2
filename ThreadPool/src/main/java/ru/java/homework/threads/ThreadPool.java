@@ -37,8 +37,7 @@ public class ThreadPool {
      * turn off threads using Thread.interrupt
      */
     public void shutdown() {
-        for (int i = 0 ; i < threads.size(); i++)
-            threads.get(i).interrupt();
+        threads.forEach(Thread::interrupt);
     }
 
     private final class TaskWorker implements Runnable {
@@ -50,7 +49,10 @@ public class ThreadPool {
                     task = queue.poll();
                 }
                 if (task != null)
-                    task.evaluate();
+                    try {
+                        task.evaluate();
+                    } catch (LightFutureImplementation.LightExecutionException ignored) {
+                    }
             }
         }
     }
