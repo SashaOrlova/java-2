@@ -1,9 +1,9 @@
+package ru.java.Client;
+
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Client {
     private Socket socket;
@@ -102,8 +102,8 @@ public class Client {
     }
 
     public static class Pair<T, R> {
-        T first;
-        R second;
+        public T first;
+        public R second;
         public Pair(T f, R s) {
             first = f;
             second = s;

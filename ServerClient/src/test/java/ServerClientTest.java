@@ -1,4 +1,6 @@
 import org.junit.Test;
+import ru.java.Server.Server;
+import ru.java.Client.Client;
 
 import java.io.FileInputStream;
 
