@@ -5,12 +5,18 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for presentation instance of client
+ */
 public class Client {
     private Socket socket;
     private DataOutputStream oos;
     private DataInputStream ois;
     private static int count = 0;
 
+    /** Start new client associate with port
+     * @param port number of port for communication with server
+     */
     public void start(int port) {
         try {
             socket = new Socket("localhost", port);
@@ -21,6 +27,12 @@ public class Client {
         }
     }
 
+    /** make request to server from client
+     * @param request string describes request to server
+     * @return answer from server
+     * @throws ClientException
+     * @throws IOException
+     */
     public Response makeRequest(String request) throws ClientException, IOException {
         if (socket == null)
             throw new ClientException("No open socket");
@@ -69,22 +81,25 @@ public class Client {
         throw new ClientException("Illegal request");
     }
 
+    /**
+     * Class for represented server answer
+     */
     public static class Response {
         private long size;
         private List<Pair<String, Boolean>> list;
         private File content;
 
-        public void setSize(long s) {
+        private void setSize(long s) {
             size = s;
         }
 
-        public void addInList(String name, boolean isDir) {
+        private void addInList(String name, boolean isDir) {
             if (list == null)
                 list = new ArrayList<>();
             list.add(new Pair<>(name, isDir));
         }
 
-        public void setFile(File file) {
+        private void setFile(File file) {
             content = file;
         }
 
@@ -101,6 +116,10 @@ public class Client {
         }
     }
 
+    /** Class for keep pair of classes
+     * @param <T> type of first object
+     * @param <R> type of second object
+     */
     public static class Pair<T, R> {
         public T first;
         public R second;

@@ -5,7 +5,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
+/**
+ * Class for presentation instance of server
+ */
 public class Server {
+    /** Start new server
+     * @param port number of port, that server listen
+     */
     public void run(int port) {
         try (ServerSocket server = new ServerSocket(port)){
             Socket client = server.accept();
