@@ -51,7 +51,7 @@ public class Client {
             long size = ois.readLong();
             response.setSize(size);
             byte[] content = new byte[1000];
-            File f = new File("src/main/resources/ans/res" + (count++));
+            File f = new File("src/main/resources/ans/res" + (++count));
             if (!f.exists()) {
                 f.createNewFile();
             }

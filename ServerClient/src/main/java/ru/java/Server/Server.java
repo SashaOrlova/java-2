@@ -41,6 +41,7 @@ public class Server {
                             path.append(in.readChar());
                         }
                         File file = new File(path.toString());
+                        if (file.exists()) {
                         InputStream os = new FileInputStream(file);
                         byte[] buf = new byte[1000];
                         out.writeLong(file.length());
@@ -49,6 +50,10 @@ public class Server {
                             out.writeInt(read);
                             out.write(buf, 0, read);
                             read = os.read(buf, 0, 1000);
+                        }
+                        os.close();
+                        } else {
+                            out.writeLong(0);
                         }
                     }
                 }

@@ -2,7 +2,10 @@ import org.junit.Test;
 import ru.java.Server.Server;
 import ru.java.Client.Client;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -91,6 +94,58 @@ public class ServerClientTest {
         assertEquals('a', in.read());
         assertEquals('a', in.read());
         assertEquals('!', in.read());
+        serverThread.interrupt();
+        serverThread.join();
+    }
+
+    @Test
+    public void getBigFile() throws Exception {
+        Thread serverThread = new Thread(() -> {
+            Server server = new Server();
+            server.run(3351);
+        });
+        File f = new File("src/main/resources/test");
+        FileOutputStream out = new FileOutputStream(f);
+        Random random = new Random();
+        byte[] buffer = new byte[1000];
+        for (int i = 0; i < 5; i++) {
+            random.nextBytes(buffer);
+            out.write(buffer);
+        }
+        out.close();
+        serverThread.start();
+        Client client = new Client();
+        Thread.sleep(100);
+        client.start(3351);
+        Client.Response response = client.makeRequest("2 src/main/resources/test");
+        File res = response.getFile();
+        assertEquals(f.length(), res.length());
+        byte[] newBuff = new byte[1000];
+        FileInputStream oldOutput = new FileInputStream(f);
+        FileInputStream newOutput = new FileInputStream(res);
+        for (int i = 0; i < 5; i++) {
+            oldOutput.read(buffer);
+            newOutput.read(newBuff);
+            assertArrayEquals(newBuff, buffer);
+        }
+        oldOutput.close();
+        newOutput.close();
+        serverThread.interrupt();
+        serverThread.join();
+    }
+
+    @Test
+    public void getNotExistedFile() throws Exception {
+        Thread serverThread = new Thread(() -> {
+            Server server = new Server();
+            server.run(3350);
+        });
+        serverThread.start();
+        Client client = new Client();
+        Thread.sleep(100);
+        client.start(3350);
+        Client.Response response = client.makeRequest("2 src/main/resources/TestExamples/abc.txt");
+        assertEquals(0, response.getSize());
         serverThread.interrupt();
         serverThread.join();
     }
