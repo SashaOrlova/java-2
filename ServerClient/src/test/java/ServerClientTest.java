@@ -18,6 +18,7 @@ public class ServerClientTest {
     public void smokeTest() throws Exception {
         Thread serverThread = new Thread(new ServerTask());
         serverThread.start();
+        Thread.sleep(100);
         Client client = new Client();
         client.start(3355);
         serverThread.interrupt();
@@ -29,6 +30,7 @@ public class ServerClientTest {
         Thread serverThread = new Thread(new ServerTask());
         serverThread.start();
         Client client = new Client();
+        Thread.sleep(100);
         client.start(3355);
         Client.Response response = client.makeRequest("1 src/main/resources/TestExamples");
         assertEquals(2, response.getSize());
@@ -45,6 +47,7 @@ public class ServerClientTest {
         Thread serverThread = new Thread(new ServerTask());
         serverThread.start();
         Client client = new Client();
+        Thread.sleep(100);
         client.start(3355);
         Client.Response response = client.makeRequest("1 src/main/resources/DirectoryWithDirectory");
         assertEquals(3, response.getSize());
@@ -73,6 +76,7 @@ public class ServerClientTest {
         Thread serverThread = new Thread(new ServerTask());
         serverThread.start();
         Client client = new Client();
+        Thread.sleep(100);
         client.start(3355);
         Client.Response response = client.makeRequest("2 src/main/resources/TestExamples/a.txt");
         assertEquals(5, response.getSize());
