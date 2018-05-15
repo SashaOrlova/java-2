@@ -10,15 +10,16 @@ import java.util.Random;
  */
 public class HardBot implements Bot {
     private Board.Field who;
-    private Board board = new Board();
+    private Board board;
 
-    final Random random = new Random();
+    private final Random random = new Random();
 
-    public HardBot(Board.Field who) {
+    public HardBot(Board.Field who, Board board) {
         this.who = who;
+        this.board = board;
     }
 
-    private Turn canWin(Board.Field who) {
+    private Turn canWinHorizontal(Board.Field who) {
         for (int i = 0; i < 3 ; i++) {
             int cross = 0;
             int zero = 0;
@@ -42,6 +43,10 @@ public class HardBot implements Bot {
             if (cross == 0 && zero == 2 && who == Board.Field.Zero)
                 return new Turn(Board.Field.Zero, positionX, positionY);
         }
+        return new Turn(Board.Field.Empty, -1, -1);
+    }
+
+    private Turn canWinVertical(Board.Field who) {
         for (int i = 0; i < 3 ; i++) {
             int cross = 0;
             int zero = 0;
@@ -64,6 +69,10 @@ public class HardBot implements Bot {
             if (cross == 0 && zero == 2 && who == Board.Field.Zero)
                 return new Turn(Board.Field.Zero, positionX, positionY);
         }
+        return new Turn(Board.Field.Empty, -1, -1);
+    }
+
+    private Turn canWinDiagonal(Board.Field who) {
         int cross = 0, zero = 0, positionX = 0, positionY = 0;
         for (int i = 0; i < 3; i++) {
             if (board.get(i, i) == Board.Field.Empty) {
@@ -91,6 +100,19 @@ public class HardBot implements Bot {
             return new Turn(Board.Field.Cross, positionX, positionY);;
         if (cross == 0 && zero == 2 && who == Board.Field.Zero)
             return new Turn(Board.Field.Zero, positionX, positionY);
+        return new Turn(Board.Field.Empty, -1, -1);
+    }
+
+    private Turn canWin(Board.Field who) {
+        Turn horizontalWin = canWinHorizontal(who);
+        Turn verticalWin = canWinVertical(who);
+        Turn diagonalWin = canWinDiagonal(who);
+        if (horizontalWin.getWho() == who)
+            return horizontalWin;
+        if (verticalWin.getWho() == who)
+            return verticalWin;
+        if (diagonalWin.getWho() == who)
+            return diagonalWin;
         return new Turn(Board.Field.Empty, -1, -1);
     }
 

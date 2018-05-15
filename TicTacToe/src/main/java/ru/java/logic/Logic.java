@@ -16,12 +16,14 @@ public class Logic {
     private Board board = new Board();
     private boolean singleGame;
     private Board.Field who = Board.Field.Empty;
+    private int type;
 
     /** change mode game to single
      * @param singleGame true if game mode single
      */
     public void setSingleGame(boolean singleGame) {
         this.singleGame = singleGame;
+        type = 0;
     }
 
     /** choose player sign
@@ -36,10 +38,14 @@ public class Logic {
      */
     public void setBotGame(int level) {
         singleGame = false;
-        if (level == 1)
+        if (level == 1) {
             playingBot = new RandomBot(who == Board.Field.Cross ? Board.Field.Zero : Board.Field.Cross);
-        else
-            playingBot = new HardBot(who == Board.Field.Cross ? Board.Field.Zero : Board.Field.Cross);
+            type = 1;
+        }
+        else {
+            playingBot = new HardBot(who == Board.Field.Cross ? Board.Field.Zero : Board.Field.Cross, new Board());
+            type = 2;
+        }
         board = new Board();
     }
 
@@ -59,15 +65,15 @@ public class Logic {
                     l.setText("X");
                 if (board.isWin() != Board.Field.Empty) {
                     if (board.isWin() == Board.Field.Cross)
-                        Main.writeRes("Cross wins!", Board.Field.Cross);
+                        Main.writeRes("Cross wins!", Board.Field.Cross, type);
                     else
-                        Main.writeRes("Zero wins!", Board.Field.Zero);
+                        Main.writeRes("Zero wins!", Board.Field.Zero, type);
                     isGameEnd = true;
                     return true;
                 }
                 if (board.isDraw()) {
                     isGameEnd = true;
-                    Main.writeRes("Draw!", Board.Field.Empty);
+                    Main.writeRes("Draw!", Board.Field.Empty, type);
                     return true;
                 }
                 if (singleGame) {
@@ -81,14 +87,14 @@ public class Logic {
             }
             if (board.isWin() != Board.Field.Empty) {
                 if (board.isWin() == Board.Field.Cross)
-                    Main.writeRes("Cross wins!", Board.Field.Cross);
+                    Main.writeRes("Cross wins!", Board.Field.Cross, type);
                 else
-                    Main.writeRes("Zero wins!", Board.Field.Zero);
+                    Main.writeRes("Zero wins!", Board.Field.Zero, type);
                 isGameEnd = true;
             }
             if (board.isDraw()) {
                 isGameEnd = true;
-                Main.writeRes("Draw!", Board.Field.Empty);
+                Main.writeRes("Draw!", Board.Field.Empty, type);
             }
             return isSuccess;
         }

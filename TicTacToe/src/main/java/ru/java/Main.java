@@ -2,6 +2,7 @@ package ru.java;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -19,51 +20,95 @@ import java.util.Scanner;
 
 public class Main extends Application {
 
-    static Label res = new Label("Game not start");
-    static Label stat = new Label("");
-    static GridPane gridpane = new GridPane();
-    Logic logic = new Logic();
+    private static Label res = new Label("Game not start");
+    private static Label stat = new Label("");
+    private static GridPane gridpane = new GridPane();
+    private Logic logic = new Logic();
+    private static Label statSingle = new Label();
+    private static Label statEasy = new Label();
+    private static Label statHard = new Label();
+
 
     private static void writeStat() {
-        int cross = 0, zero = 0 , draw = 0;
+        int crossSingle = 0, zeroSingle = 0 , drawSingle = 0;
+        int crossEasy = 0, zeroEasy = 0 , drawEasy = 0;
+        int crossHard = 0, zeroHard = 0 , drawHard = 0;
         try (FileReader fr = new FileReader("src/statistic")) {
             Scanner scan = new Scanner(fr);
-            cross = scan.nextInt();
-            zero = scan.nextInt();
-            draw = scan.nextInt();
+            crossSingle = scan.nextInt();
+            zeroSingle = scan.nextInt();
+            drawSingle = scan.nextInt();
+            crossEasy = scan.nextInt();
+            zeroEasy = scan.nextInt();
+            drawEasy = scan.nextInt();
+            crossHard = scan.nextInt();
+            zeroHard = scan.nextInt();
+            drawHard = scan.nextInt();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        stat.setText("CROSS " + cross + "\nZERO " + zero + "\nDRAW " + draw);
+        statSingle.setText("Single Game\nCROSS " + crossSingle + "\nZERO " + zeroSingle + "\nDRAW " + drawSingle);
+        statEasy.setText("Easy Bot\nCROSS " + crossEasy + "\nZERO " + zeroEasy + "\nDRAW " + drawEasy);
+        statHard.setText("Hard Bot\nCROSS " + crossHard + "\nZERO " + zeroHard + "\nDRAW " + drawHard);
     }
 
-    /** write resualt of game
+    /** write result of game
      * @param st string for write
      * @param who winner
      */
-    public static void writeRes(String st, Board.Field who) {
+    public static void writeRes(String st, Board.Field who, int type) {
         res.setText(st);
-        int cross = 0, zero = 0 , draw = 0;
+        int crossSingle = 0, zeroSingle = 0 , drawSingle = 0;
+        int crossEasy = 0, zeroEasy = 0 , drawEasy = 0;
+        int crossHard = 0, zeroHard = 0 , drawHard = 0;
         try (FileReader fr = new FileReader("src/statistic")) {
             Scanner scan = new Scanner(fr);
-            cross = scan.nextInt();
-            zero = scan.nextInt();
-            draw = scan.nextInt();
+            crossSingle = scan.nextInt();
+            zeroSingle = scan.nextInt();
+            drawSingle = scan.nextInt();
+            crossEasy = scan.nextInt();
+            zeroEasy = scan.nextInt();
+            drawEasy = scan.nextInt();
+            crossHard = scan.nextInt();
+            zeroHard = scan.nextInt();
+            drawHard = scan.nextInt();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        if (who == Board.Field.Empty)
-            draw++;
-        if (who == Board.Field.Cross)
-            cross++;
-        if (who == Board.Field.Zero)
-            zero++;
+        if (type == 0) {
+            if (who == Board.Field.Empty)
+                drawSingle++;
+            if (who == Board.Field.Cross)
+                crossSingle++;
+            if (who == Board.Field.Zero)
+                zeroSingle++;
+        }
+        if (type == 1) {
+            if (who == Board.Field.Empty)
+                drawEasy++;
+            if (who == Board.Field.Cross)
+                crossEasy++;
+            if (who == Board.Field.Zero)
+                zeroEasy++;
+        }
+        if (type == 2) {
+            if (who == Board.Field.Empty)
+                drawHard++;
+            if (who == Board.Field.Cross)
+                crossHard++;
+            if (who == Board.Field.Zero)
+                zeroHard++;
+        }
         try (FileWriter fw = new FileWriter("src/statistic")) {
-            fw.write(cross + '0');
-            fw.write('\n');
-            fw.write(zero + '0');
-            fw.write('\n');
-            fw.write(draw + '0');
+            fw.write(crossSingle);
+            fw.write(zeroSingle);
+            fw.write(drawSingle);
+            fw.write(crossEasy);
+            fw.write(zeroEasy);
+            fw.write(drawEasy);
+            fw.write(crossHard);
+            fw.write(zeroHard);
+            fw.write(drawHard);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -150,7 +195,11 @@ public class Main extends Application {
         bot1.getChildren().addAll(bot1O, bot1X);
         HBox bot2 = new HBox();
         bot2.getChildren().addAll(bot2O, bot2X);
-        vBox.getChildren().addAll(restart, bot1, bot2, showStatistic, res, stat);
+        HBox hBoxStat = new HBox();
+        hBoxStat.setSpacing(10);
+        hBoxStat.setPadding(new Insets(15,20, 10,10));
+        hBoxStat.getChildren().addAll(statSingle, statEasy, statHard);
+        vBox.getChildren().addAll(restart, bot1, bot2, showStatistic, res, hBoxStat);
         ObservableList<Node> fields = gridpane.getChildren();
         for (int i = 0; i < fields.size(); i++) {
             int unmodifiedI = i;
@@ -166,6 +215,8 @@ public class Main extends Application {
         gridpane.setPrefSize(300, 300);
         hBox.getChildren().addAll(gridpane, vBox);
         primaryStage.setScene(new Scene(hBox, 600, 300));
+        primaryStage.setMinHeight(200);
+        primaryStage.setMinWidth(300);
         primaryStage.show();
     }
 }
