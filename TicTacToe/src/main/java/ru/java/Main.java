@@ -20,8 +20,8 @@ import java.util.Scanner;
 
 public class Main extends Application {
 
+    public static int port = 8080;
     private static Label res = new Label("Game not start");
-    private static Label stat = new Label("");
     private static GridPane gridpane = new GridPane();
     private Logic logic = new Logic();
     private static Label statSingle = new Label();
@@ -50,6 +50,10 @@ public class Main extends Application {
         statSingle.setText("Single Game\nCROSS " + crossSingle + "\nZERO " + zeroSingle + "\nDRAW " + drawSingle);
         statEasy.setText("Easy Bot\nCROSS " + crossEasy + "\nZERO " + zeroEasy + "\nDRAW " + drawEasy);
         statHard.setText("Hard Bot\nCROSS " + crossHard + "\nZERO " + zeroHard + "\nDRAW " + drawHard);
+    }
+
+    public static void writeError(String st) {
+        res.setText(st);
     }
 
     /** write result of game
@@ -125,6 +129,9 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        if (args.length > 0) {
+            port = Integer.parseInt(args[0]);
+        }
         launch(args);
     }
 
@@ -152,6 +159,11 @@ public class Main extends Application {
         Button bot1O = new Button("Start Simple Bot O");
         Button bot2X = new Button("Start Hard Bot X");
         Button bot2O = new Button("Start Hard Bot O");
+        Button serPX = new Button("Start Network Game Server X");
+        Button serCX = new Button("Start Network Game Client X");
+        Button serPO = new Button("Start Network Game Server O");
+        Button serCO = new Button("Start Network Game Client O");
+
         Button showStatistic = new Button("Show statistic");
         showStatistic.setOnAction(event -> Main.writeStat());
         restart.setOnAction(event -> {
@@ -191,15 +203,49 @@ public class Main extends Application {
             redraw();
             logic.BotTurn();
         });
+        serPX.setOnAction(event -> {
+            logic.restart();
+            logic.changePlayer(Board.Field.Cross);
+            logic.setBotGame(3);
+            res.setText("");
+            redraw();
+        });
+        serPO.setOnAction(event -> {
+            logic.restart();
+            logic.changePlayer(Board.Field.Zero);
+            logic.setBotGame(3);
+            res.setText("");
+            redraw();
+            logic.BotTurn();
+        });
+        serCX.setOnAction(event -> {
+            logic.restart();
+            logic.changePlayer(Board.Field.Cross);
+            logic.setBotGame(4);
+            res.setText("");
+            redraw();
+        });
+        serCO.setOnAction(event -> {
+            logic.restart();
+            logic.changePlayer(Board.Field.Zero);
+            logic.setBotGame(4);
+            res.setText("");
+            redraw();
+            logic.BotTurn();
+        });
         HBox bot1 = new HBox();
         bot1.getChildren().addAll(bot1O, bot1X);
         HBox bot2 = new HBox();
         bot2.getChildren().addAll(bot2O, bot2X);
+        HBox bot3 = new HBox();
+        bot3.getChildren().addAll(serCO, serCX);
+        HBox bot4 = new HBox();
+        bot4.getChildren().addAll(serPO, serPX);
         HBox hBoxStat = new HBox();
         hBoxStat.setSpacing(10);
         hBoxStat.setPadding(new Insets(15,20, 10,10));
         hBoxStat.getChildren().addAll(statSingle, statEasy, statHard);
-        vBox.getChildren().addAll(restart, bot1, bot2, showStatistic, res, hBoxStat);
+        vBox.getChildren().addAll(restart, bot1, bot2, bot3, bot4, showStatistic, res, hBoxStat);
         ObservableList<Node> fields = gridpane.getChildren();
         for (int i = 0; i < fields.size(); i++) {
             int unmodifiedI = i;

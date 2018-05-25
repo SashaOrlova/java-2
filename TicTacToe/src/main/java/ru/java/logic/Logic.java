@@ -2,9 +2,7 @@ package ru.java.logic;
 
 import javafx.scene.control.Label;
 import ru.java.Main;
-import ru.java.bot.Bot;
-import ru.java.bot.HardBot;
-import ru.java.bot.RandomBot;
+import ru.java.bot.*;
 
 /**
  * Class control all logic in game
@@ -42,9 +40,25 @@ public class Logic {
             playingBot = new RandomBot(who == Board.Field.Cross ? Board.Field.Zero : Board.Field.Cross);
             type = 1;
         }
-        else {
+        if (level == 2) {
             playingBot = new HardBot(who == Board.Field.Cross ? Board.Field.Zero : Board.Field.Cross, new Board());
             type = 2;
+        }
+        if (level == 3) {
+            try {
+                playingBot = new PlayerServer(Main.port, who == Board.Field.Cross ? Board.Field.Zero : Board.Field.Cross);
+            } catch (PlayerClient.ConnectException e) {
+                Main.writeError("Exception in connection with other player");
+            }
+            type = 3;
+        }
+        if (level == 4) {
+            try {
+                playingBot = new PlayerClient("localhost", Main.port, who == Board.Field.Cross ? Board.Field.Zero : Board.Field.Cross);
+            } catch (PlayerClient.ConnectException e) {
+                Main.writeError("Exception in connection with other player");
+            }
+            type = 4;
         }
         board = new Board();
     }
@@ -79,10 +93,15 @@ public class Logic {
                 if (singleGame) {
                     who = who == Board.Field.Cross ? Board.Field.Zero : Board.Field.Cross;
                 } else {
-                    playingBot.setTurn(new Turn(who, y, x));
-                    Turn t = playingBot.getNextTurn();
-                    board.set(t.getRow(), t.getCol(), t.getWho());
-                    Main.drawTurn(t.getCol() * 3 + (t.getRow() + 1), t.getWho());
+                    try {
+                        playingBot.setTurn(new Turn(who, y, x));
+                        Turn t = playingBot.getNextTurn();
+                        board.set(t.getRow(), t.getCol(), t.getWho());
+                        Main.drawTurn(t.getCol() * 3 + (t.getRow() + 1), t.getWho());
+                    } catch (PlayerClient.ConnectException e) {
+                        Main.writeError("Exception in connection with other player");
+                    }
+
                 }
             }
             if (board.isWin() != Board.Field.Empty) {
@@ -105,9 +124,13 @@ public class Logic {
      * make bot turn
      */
     public void BotTurn() {
-        Turn t = playingBot.getNextTurn();
-        board.set(t.getRow(), t.getCol(), t.getWho());
-        Main.drawTurn(t.getCol()*3+(t.getRow() + 1), t.getWho());
+        try {
+            Turn t = playingBot.getNextTurn();
+            board.set(t.getRow(), t.getCol(), t.getWho());
+            Main.drawTurn(t.getCol()*3+(t.getRow() + 1), t.getWho());
+        } catch (PlayerClient.ConnectException e) {
+            Main.writeError("Exception in connection with other player");
+        }
     }
 
     /**
