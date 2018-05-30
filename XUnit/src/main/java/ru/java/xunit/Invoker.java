@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.java.xunit.annotations.*;
 
 import java.io.IOException;
-import java.io.Writer;
+import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -113,7 +113,7 @@ public class Invoker {
      * @throws InvokerException if class not suitable for testing
      * @throws IOException if happens exception with writer
      */
-    public static void invoke(@NotNull MethodsKeeper methodsKeeper, Writer writer) throws InvokerException, IOException {
+    public static void invoke(@NotNull MethodsKeeper methodsKeeper, PrintStream writer) throws InvokerException, IOException {
         int passedTests = 0;
         int countTests = 0;
         Object instance = getInstance(methodsKeeper.getClazz());
@@ -138,7 +138,7 @@ public class Invoker {
                 try {
                     testMethod.invoke(instance);
                     if (!testMethod.getAnnotation(Test.class).expected().equals(Test.EmptyException.class)) {
-                        writer.write("Exception not throw");
+                        writer.println("Exception not throw");
                     }
                     passedTests++;
                 } catch (IllegalAccessException | InvocationTargetException e) {
@@ -156,9 +156,24 @@ public class Invoker {
             }
         }
         long finishTime = System.currentTimeMillis();
-        writer.write("ALL TESTS: " + Integer.toString(countTests));
-        writer.write("\nTESTS PASSED: " + Integer.toString(passedTests));
-        writer.write("\nTIME: " + Long.toString(finishTime - startTime));
+        writer.println("ALL TESTS: " + Integer.toString(countTests));
+        writer.println("TESTS PASSED: " + Integer.toString(passedTests));
+        writer.println("\nTIME: " + Long.toString(finishTime - startTime));
+    }
+
+    public static void main(String[] args) {
+        if (args.length > 0) {
+            try {
+                Class testClass = Class.forName(args[0]);
+                invoke(getMethods(testClass), System.out);
+            } catch (ClassNotFoundException e) {
+                System.out.println("Class not found!");
+            } catch (InvokerException e) {
+                System.out.println(e.getMessage());
+            } catch (IOException e) {
+                System.out.println("Problem with output");
+            }
+        }
     }
 
     static class InvokerException extends Exception {

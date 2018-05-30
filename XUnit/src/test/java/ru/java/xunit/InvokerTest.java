@@ -5,15 +5,17 @@ import testClasses.Test2;
 import testClasses.Test3;
 import testClasses.Test4;
 
-import java.io.StringWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import static org.junit.Assert.*;
 
 public class InvokerTest {
     @Test
     public void smokeTest() throws Exception {
-        StringWriter wr = new StringWriter();
-        Invoker.invoke(Invoker.getMethods(Test1.class), wr);
-        String ans = wr.toString();
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteStream);
+        Invoker.invoke(Invoker.getMethods(Test1.class), printStream);
+        String ans = byteStream.toString();
         String[] res = ans.split("\n");
         assertEquals("ALL TESTS: 1", res[0]);
         assertEquals("TESTS PASSED: 1", res[1]);
@@ -21,9 +23,10 @@ public class InvokerTest {
 
     @Test
     public void manyTests() throws Exception {
-        StringWriter wr = new StringWriter();
-        Invoker.invoke(Invoker.getMethods(Test2.class), wr);
-        String ans = wr.toString();
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteStream);
+        Invoker.invoke(Invoker.getMethods(Test2.class), printStream);
+        String ans = byteStream.toString();
         String[] res = ans.split("\n");
         assertEquals("ALL TESTS: 5", res[0]);
         assertEquals("TESTS PASSED: 5", res[1]);
@@ -31,9 +34,10 @@ public class InvokerTest {
 
     @Test
     public void ignoredAndExpected() throws Exception {
-        StringWriter wr = new StringWriter();
-        Invoker.invoke(Invoker.getMethods(Test3.class), wr);
-        String ans = wr.toString();
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteStream);
+        Invoker.invoke(Invoker.getMethods(Test3.class), printStream);
+        String ans = byteStream.toString();
         String[] res = ans.split("\n");
         assertEquals("ALL TESTS: 3", res[0]);
         assertEquals("TESTS PASSED: 3", res[1]);
@@ -41,9 +45,10 @@ public class InvokerTest {
 
     @Test
     public void failTests() throws Exception {
-        StringWriter wr = new StringWriter();
-        Invoker.invoke(Invoker.getMethods(Test4.class), wr);
-        String ans = wr.toString();
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteStream);
+        Invoker.invoke(Invoker.getMethods(Test4.class), printStream);
+        String ans = byteStream.toString();
         String[] res = ans.split("\n");
         assertEquals("ALL TESTS: 3", res[0]);
         assertEquals("TESTS PASSED: 1", res[1]);
