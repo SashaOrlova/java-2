@@ -146,6 +146,8 @@ public class Invoker {
                         passedTests++;
                     }
                 }
+            } else {
+                writer.println(testMethod.getAnnotation(Test.class).ignore());
             }
             for (Method afterTest : methodsKeeper.getAfterMethods()) {
                 try {
