@@ -10,8 +10,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+/**
+ * Class for invoke test classes and call test methods
+ */
 public class Invoker {
-    private static class MethodsKeeper {
+    /**
+     * Class for store methods of test class
+     */
+    public static class MethodsKeeper {
         ArrayList<Method> testMethods = new ArrayList<>();
         ArrayList<Method> beforeMethods = new ArrayList<>();
         ArrayList<Method> afterMethods = new ArrayList<>();
@@ -58,6 +64,11 @@ public class Invoker {
         }
     }
 
+    /**
+     * @param clazz - class for testing
+     * @return MethodKeeper stored methods of class
+     * @throws InvokerException - if class not suitable for testing
+     */
     @NotNull
     public static MethodsKeeper getMethods(@NotNull Class clazz) throws InvokerException {
         MethodsKeeper methodsKeeper = new MethodsKeeper();
@@ -83,7 +94,7 @@ public class Invoker {
     }
 
     private static Object getInstance(Class clazz) throws InvokerException {
-        Object instance = null;
+        Object instance;
         try {
             Constructor<?> constructor = null;
             constructor = clazz.getDeclaredConstructor();
@@ -95,6 +106,13 @@ public class Invoker {
         return instance;
     }
 
+    /**
+     * invoke class represented in methodKeeper
+     * @param methodsKeeper methodsKeeper stored all methods of class
+     * @param writer writer where result of test be write
+     * @throws InvokerException if class not suitable for testing
+     * @throws IOException if happens exception with writer
+     */
     public static void invoke(@NotNull MethodsKeeper methodsKeeper, Writer writer) throws InvokerException, IOException {
         int passedTests = 0;
         int countTests = 0;
