@@ -20,6 +20,6 @@ public class Test2 {
 
     public void notTest() {}
 
-    @Test(ignore = "ignored")
+    @Test(ignore = "ignore")
     public void ignoredTest() {}
 }

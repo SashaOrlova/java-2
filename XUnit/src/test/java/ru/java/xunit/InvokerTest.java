@@ -28,8 +28,9 @@ public class InvokerTest {
         Invoker.invoke(Invoker.getMethods(Test2.class), printStream);
         String ans = byteStream.toString();
         String[] res = ans.split("\n");
-        assertEquals("ALL TESTS: 5", res[0]);
-        assertEquals("TESTS PASSED: 5", res[1]);
+        assertEquals("ignore", res[0]);
+        assertEquals("ALL TESTS: 5", res[1]);
+        assertEquals("TESTS PASSED: 5", res[2]);
     }
 
     @Test
@@ -39,8 +40,11 @@ public class InvokerTest {
         Invoker.invoke(Invoker.getMethods(Test3.class), printStream);
         String ans = byteStream.toString();
         String[] res = ans.split("\n");
-        assertEquals("ALL TESTS: 3", res[0]);
-        assertEquals("TESTS PASSED: 3", res[1]);
+        assertEquals("ignored", res[0]);
+        assertEquals("ignored", res[1]);
+        assertEquals("ignored", res[2]);
+        assertEquals("ALL TESTS: 3", res[3]);
+        assertEquals("TESTS PASSED: 3", res[4]);
     }
 
     @Test
@@ -50,7 +54,8 @@ public class InvokerTest {
         Invoker.invoke(Invoker.getMethods(Test4.class), printStream);
         String ans = byteStream.toString();
         String[] res = ans.split("\n");
-        assertEquals("ALL TESTS: 3", res[0]);
-        assertEquals("TESTS PASSED: 1", res[1]);
+        assertEquals("not a test", res[0]);
+        assertEquals("ALL TESTS: 3", res[1]);
+        assertEquals("TESTS PASSED: 1", res[2]);
     }
 }

@@ -19,6 +19,6 @@ public class Test4 {
     @Test
     public void rightTest() {}
 
-    @Test(ignore = "ignored")
+    @Test(ignore = "not a test")
     public void ignoredTest() {}
 }
