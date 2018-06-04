@@ -13,15 +13,12 @@ import javafx.stage.Stage;
 import ru.java.logic.Board;
 import ru.java.logic.Logic;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 public class Main extends Application {
 
     private static Label res = new Label("Game not start");
-    private static Label stat = new Label("");
     private static GridPane gridpane = new GridPane();
     private Logic logic = new Logic();
     private static Label statSingle = new Label();
@@ -33,17 +30,16 @@ public class Main extends Application {
         int crossSingle = 0, zeroSingle = 0 , drawSingle = 0;
         int crossEasy = 0, zeroEasy = 0 , drawEasy = 0;
         int crossHard = 0, zeroHard = 0 , drawHard = 0;
-        try (FileReader fr = new FileReader("src/statistic")) {
-            Scanner scan = new Scanner(fr);
-            crossSingle = scan.nextInt();
-            zeroSingle = scan.nextInt();
-            drawSingle = scan.nextInt();
-            crossEasy = scan.nextInt();
-            zeroEasy = scan.nextInt();
-            drawEasy = scan.nextInt();
-            crossHard = scan.nextInt();
-            zeroHard = scan.nextInt();
-            drawHard = scan.nextInt();
+        try (DataInputStream dos = new DataInputStream(new FileInputStream("src/main/resources/statistic"))) {
+            crossSingle = dos.readInt();
+            zeroSingle = dos.readInt();
+            drawSingle = dos.readInt();
+            crossEasy = dos.readInt();
+            zeroEasy = dos.readInt();
+            drawEasy = dos.readInt();
+            crossHard = dos.readInt();
+            zeroHard = dos.readInt();
+            drawHard = dos.readInt();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -61,17 +57,16 @@ public class Main extends Application {
         int crossSingle = 0, zeroSingle = 0 , drawSingle = 0;
         int crossEasy = 0, zeroEasy = 0 , drawEasy = 0;
         int crossHard = 0, zeroHard = 0 , drawHard = 0;
-        try (FileReader fr = new FileReader("src/statistic")) {
-            Scanner scan = new Scanner(fr);
-            crossSingle = scan.nextInt();
-            zeroSingle = scan.nextInt();
-            drawSingle = scan.nextInt();
-            crossEasy = scan.nextInt();
-            zeroEasy = scan.nextInt();
-            drawEasy = scan.nextInt();
-            crossHard = scan.nextInt();
-            zeroHard = scan.nextInt();
-            drawHard = scan.nextInt();
+        try (DataInputStream dos = new DataInputStream(new FileInputStream("src/main/resources/statistic"))) {
+            crossSingle = dos.readInt();
+            zeroSingle = dos.readInt();
+            drawSingle = dos.readInt();
+            crossEasy = dos.readInt();
+            zeroEasy = dos.readInt();
+            drawEasy = dos.readInt();
+            crossHard = dos.readInt();
+            zeroHard = dos.readInt();
+            drawHard = dos.readInt();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -99,16 +94,16 @@ public class Main extends Application {
             if (who == Board.Field.Zero)
                 zeroHard++;
         }
-        try (FileWriter fw = new FileWriter("src/statistic")) {
-            fw.write(crossSingle);
-            fw.write(zeroSingle);
-            fw.write(drawSingle);
-            fw.write(crossEasy);
-            fw.write(zeroEasy);
-            fw.write(drawEasy);
-            fw.write(crossHard);
-            fw.write(zeroHard);
-            fw.write(drawHard);
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("src/main/resources/statistic"))) {
+            dos.writeInt(crossSingle);
+            dos.writeInt(zeroSingle);
+            dos.writeInt(drawSingle);
+            dos.writeInt(crossEasy);
+            dos.writeInt(zeroEasy);
+            dos.writeInt(drawEasy);
+            dos.writeInt(crossHard);
+            dos.writeInt(zeroHard);
+            dos.writeInt(drawHard);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
