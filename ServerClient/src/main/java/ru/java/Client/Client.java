@@ -5,16 +5,21 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.java.Server.Server.FIRST_REQUEST;
+import static ru.java.Server.Server.SECOND_REQUEST;
+
 /**
  * Class for presentation instance of client
  */
 public class Client {
+    private static int count = 0;
     private Socket socket;
     private DataOutputStream oos;
     private DataInputStream ois;
-    private static int count = 0;
 
-    /** Start new client associate with port
+    /**
+     * Start new client associate with port
+     *
      * @param port number of port for communication with server
      */
     public void start(int port) {
@@ -27,7 +32,9 @@ public class Client {
         }
     }
 
-    /** make request to server from client
+    /**
+     * make request to server from client
+     *
      * @param request string describes request to server
      * @return answer from server
      * @throws ClientException
@@ -37,9 +44,12 @@ public class Client {
         if (socket == null)
             throw new ClientException("No open socket");
         else {
-            oos.writeInt(request.charAt(0) - '0');
+            if (request.charAt(0) == '1')
+                oos.writeInt(FIRST_REQUEST);
+            if (request.charAt(0) == '2')
+                oos.writeInt(SECOND_REQUEST);
             oos.writeInt(request.length() - 2);
-            for (int i = 2 ; i < request.length(); i++) {
+            for (int i = 2; i < request.length(); i++) {
                 oos.writeChar(request.charAt(i));
             }
         }
@@ -50,7 +60,7 @@ public class Client {
             for (int i = 0; i < size; i++) {
                 int stringSize = ois.readInt();
                 StringBuilder s = new StringBuilder();
-                for (int j = 0 ; j < stringSize; j++) {
+                for (int j = 0; j < stringSize; j++) {
                     s.append(ois.readChar());
                 }
                 boolean isDir = ois.readBoolean();
@@ -68,7 +78,7 @@ public class Client {
                 f.createNewFile();
             }
             OutputStream os = new FileOutputStream(f);
-            for (int read = 0; size - read > 0;) {
+            for (int read = 0; size - read > 0; ) {
                 int len = ois.readInt();
                 ois.read(content, 0, len);
                 os.write(content, 0, len);
@@ -89,18 +99,10 @@ public class Client {
         private List<Pair<String, Boolean>> list;
         private File content;
 
-        private void setSize(long s) {
-            size = s;
-        }
-
         private void addInList(String name, boolean isDir) {
             if (list == null)
                 list = new ArrayList<>();
             list.add(new Pair<>(name, isDir));
-        }
-
-        private void setFile(File file) {
-            content = file;
         }
 
         public List<Pair<String, Boolean>> getList() {
@@ -111,23 +113,35 @@ public class Client {
             return content;
         }
 
+        private void setFile(File file) {
+            content = file;
+        }
+
         public long getSize() {
             return size;
         }
+
+        private void setSize(long s) {
+            size = s;
+        }
     }
 
-    /** Class for keep pair of classes
+    /**
+     * Class for keep pair of classes
+     *
      * @param <T> type of first object
      * @param <R> type of second object
      */
     public static class Pair<T, R> {
         public T first;
         public R second;
+
         public Pair(T f, R s) {
             first = f;
             second = s;
         }
     }
+
     public static class ClientException extends Exception {
         ClientException(String message) {
             super(message);

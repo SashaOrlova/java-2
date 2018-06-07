@@ -9,19 +9,25 @@ import java.net.SocketTimeoutException;
  * Class for presentation instance of server
  */
 public class Server {
-    /** Start new server
+    /**
+     * Start new server
+     *
      * @param port number of port, that server listen
      */
+    public static final int FIRST_REQUEST = 1;
+    public static final int SECOND_REQUEST = 2;
+
+
     public void run(int port) {
-        try (ServerSocket server = new ServerSocket(port)){
+        try (ServerSocket server = new ServerSocket(port)) {
             Socket client = server.accept();
             client.setSoTimeout(100);
             DataOutputStream out = new DataOutputStream(client.getOutputStream());
             DataInputStream in = new DataInputStream(client.getInputStream());
-            while(!client.isClosed()){
+            while (!client.isClosed()) {
                 try {
                     int type = in.readInt();
-                    if (type == 1) {
+                    if (type == FIRST_REQUEST) {
                         int size = in.readInt();
                         StringBuilder path = new StringBuilder();
                         for (int i = 0; i < size; i++) {
@@ -40,7 +46,7 @@ public class Server {
                             }
                         }
                     }
-                    if (type == 2) {
+                    if (type == SECOND_REQUEST) {
                         int size = in.readInt();
                         StringBuilder path = new StringBuilder();
                         for (int i = 0; i < size; i++) {
@@ -48,22 +54,21 @@ public class Server {
                         }
                         File file = new File(path.toString());
                         if (file.exists()) {
-                        InputStream os = new FileInputStream(file);
-                        byte[] buf = new byte[1000];
-                        out.writeLong(file.length());
-                        int read = os.read(buf, 0, 1000);
-                        while (read > 0) {
-                            out.writeInt(read);
-                            out.write(buf, 0, read);
-                            read = os.read(buf, 0, 1000);
-                        }
-                        os.close();
+                            InputStream os = new FileInputStream(file);
+                            byte[] buf = new byte[1000];
+                            out.writeLong(file.length());
+                            int read = os.read(buf, 0, 1000);
+                            while (read > 0) {
+                                out.writeInt(read);
+                                out.write(buf, 0, read);
+                                read = os.read(buf, 0, 1000);
+                            }
+                            os.close();
                         } else {
                             out.writeLong(0);
                         }
                     }
-                }
-                catch (SocketTimeoutException e) {
+                } catch (SocketTimeoutException e) {
                     if (Thread.interrupted()) {
                         return;
                     }
