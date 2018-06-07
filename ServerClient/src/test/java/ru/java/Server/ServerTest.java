@@ -23,12 +23,12 @@ public class ServerTest {
             Server server = new Server();
             server.run(4353);
         });
+        serverThread.start();
         folder.newFolder("TempFolder");
         File f = folder.newFile("TempFolder/a.txt");
         FileOutputStream out = new FileOutputStream(f);
         out.write("AAAA!".getBytes());
         Thread.sleep(100);
-        serverThread.start();
         Socket socket = new Socket("localhost", 4353);
         DataOutputStream oos = new DataOutputStream(socket.getOutputStream());
         DataInputStream ois = new DataInputStream(socket.getInputStream());
@@ -49,10 +49,10 @@ public class ServerTest {
             Server server = new Server();
             server.run(4354);
         });
+        serverThread.start();
         File tempFolder = folder.newFolder("TestFolder");
         folder.newFile("TestFolder/a.txt");
         folder.newFile("TestFolder/b.txt");
-        serverThread.start();
         Thread.sleep(100);
         Socket socket = new Socket("localhost", 4354);
         DataOutputStream oos = new DataOutputStream(socket.getOutputStream());
