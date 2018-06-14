@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Test {
     class EmptyException {}
-    Class expected() default EmptyException.class;
+    Class<?> expected() default EmptyException.class;
     String ignore() default "";
 }
