@@ -53,7 +53,7 @@ public class Server {
                             path.append(in.readChar());
                         }
                         File file = new File(path.toString());
-                        if (file.exists()) {
+                        if (file.exists() && file.isFile()) {
                             InputStream os = new FileInputStream(file);
                             byte[] buf = new byte[1000];
                             out.writeLong(file.length());
