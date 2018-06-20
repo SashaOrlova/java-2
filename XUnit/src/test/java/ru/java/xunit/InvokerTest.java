@@ -66,4 +66,11 @@ public class InvokerTest {
         assertEquals("ALL TESTS: 1", res[0]);
         assertEquals("BeforeClass Before Test After AfterClass", Test5.answer.toString());
     }
+
+    @Test(expected = Invoker.InvokerCreateException.class)
+    public void testTwoAnnotations() throws Exception {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteStream);
+        Invoker.invoke(Invoker.getMethods(Test6.class), printStream);
+    }
 }

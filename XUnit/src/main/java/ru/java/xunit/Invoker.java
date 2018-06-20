@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Invoker {
     private static ArrayList<Class<? extends Annotation>> annotations = new ArrayList<>();
 
-    {
+    static {
         annotations.add(Test.class);
         annotations.add(Before.class);
         annotations.add(After.class);
@@ -82,7 +82,7 @@ public class Invoker {
             throws InvokerCreateException {
         if (method.getAnnotation(clazz) != null) {
             for (Class<? extends Annotation> annotation : annotations) {
-                if (!annotation.equals(clazz) && method.getAnnotation(annotation) == null) {
+                if (!annotation.equals(clazz) && method.getAnnotation(annotation) != null) {
                     throw new InvokerCreateException("Two annotations for one method");
                 }
             }
