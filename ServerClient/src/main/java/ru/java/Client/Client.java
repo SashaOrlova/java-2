@@ -17,14 +17,10 @@ public class Client {
     /** Start new client associate with port
      * @param port number of port for communication with server
      */
-    public void start(int port) {
-        try {
+    public void start(int port) throws IOException {
             socket = new Socket("localhost", port);
             oos = new DataOutputStream(socket.getOutputStream());
             ois = new DataInputStream(socket.getInputStream());
-        } catch (Exception e) {
-            System.out.println("Exception in starting client socket" + e.getMessage());
-        }
     }
 
     /** make request to server from client
